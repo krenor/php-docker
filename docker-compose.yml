@@ -9,6 +9,8 @@ services:
       dockerfile: ./nginx/Dockerfile
     ports:
       - "8080:80"
+    volumes:
+      - ./src/public:/var/www/public
     depends_on:
       - php-fpm
 

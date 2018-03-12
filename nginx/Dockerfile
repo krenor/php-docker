@@ -7,11 +7,19 @@ RUN apk upgrade --update && \
 COPY ./nginx/nginx.conf \
      /etc/nginx/
 
+# Load individual server configurations.
+COPY ./nginx/default.conf \
+     /etc/nginx/conf.d/
+
+# Load static files directory.
+COPY ./src/public/ \
+     /var/www/public/
+
 # Set default working directory.
 WORKDIR /var/www
 
-# Expose the ports inside the container itself.
-EXPOSE 80 443
+# Expose the port inside the container itself.
+EXPOSE 80
 
 # Start nginx.
 CMD ["nginx"]
