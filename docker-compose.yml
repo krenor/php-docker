@@ -9,6 +9,9 @@ services:
       dockerfile: ./nginx/Dockerfile
     ports:
       - "8080:80"
+    environment:
+      - SERVER_NAME=project.app
+      - FASTCGI_BACKEND=php-fpm:9000
     volumes:
       - ./src/public:/var/www/public
     depends_on:
