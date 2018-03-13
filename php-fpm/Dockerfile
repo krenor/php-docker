@@ -1,5 +1,6 @@
 FROM php:7.2-fpm-alpine
 
+ARG INSTALL_GD=false
 ARG INSTALL_MONGODB=false
 ARG INSTALL_OPCACHE=false
 ARG INSTALL_REDIS=false
@@ -17,6 +18,20 @@ RUN apk upgrade --update && \
     apk add --no-cache --virtual build-dependencies \
       autoconf \
       build-base && \
+    #------------------------------
+    # GD
+    #------------------------------
+    if [ ${INSTALL_GD} = true ]; then \
+        apk add --no-cache \
+            libjpeg-turbo-dev \
+            freetype-dev \
+            libpng-dev && \
+        docker-php-ext-configure gd \
+            --with-freetype-dir=/usr/include/freetype2 \
+            --with-jpeg-dir=/usr/lib \
+            --with-png-dir=/usr/lib && \
+        docker-php-ext-install gd \
+    ;fi && \
     #------------------------------
     # MongoDB
     #------------------------------
