@@ -24,6 +24,7 @@ services:
       dockerfile: ./php-fpm/Dockerfile
       args:
         - INSTALL_MONGODB=false
+        - INSTALL_OPCACHE=false
         - INSTALL_REDIS=false
     volumes:
       - ./src:/var/www

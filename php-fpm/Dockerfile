@@ -1,12 +1,14 @@
 FROM php:7.2-fpm-alpine
 
 ARG INSTALL_MONGODB=false
+ARG INSTALL_OPCACHE=false
 ARG INSTALL_REDIS=false
 
 COPY php-fpm/pool.conf \
      /usr/local/etc/php-fpm.d/
 
 COPY php-fpm/php.ini \
+     php-fpm/opcache.ini \
      /usr/local/etc/php/conf.d/
 
 RUN apk upgrade --update && \
@@ -19,6 +21,14 @@ RUN apk upgrade --update && \
     if [ ${INSTALL_MONGODB} = true ]; then \
         pecl install mongodb && \
         docker-php-ext-enable mongodb \
+    ;fi && \
+    #------------------------------
+    # OPCache
+    #------------------------------
+    if [ ${INSTALL_OPCACHE} = true ]; then \
+        docker-php-ext-install opcache \
+    ;else \
+        rm /usr/local/etc/php/conf.d/opcache.ini \
     ;fi && \
     #------------------------------
     # Redis
