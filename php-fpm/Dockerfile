@@ -1,5 +1,6 @@
 FROM php:7.2-fpm-alpine
 
+ARG INSTALL_MONGODB=false
 ARG INSTALL_REDIS=false
 
 COPY php-fpm/pool.conf \
@@ -12,6 +13,13 @@ RUN apk upgrade --update && \
     apk add --no-cache --virtual build-dependencies \
       autoconf \
       build-base && \
+    #------------------------------
+    # MongoDB
+    #------------------------------
+    if [ ${INSTALL_MONGODB} = true ]; then \
+        pecl install mongodb && \
+        docker-php-ext-enable mongodb \
+    ;fi && \
     #------------------------------
     # Redis
     #------------------------------
