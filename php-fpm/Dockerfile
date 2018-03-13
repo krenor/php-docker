@@ -3,12 +3,14 @@ FROM php:7.2-fpm-alpine
 ARG INSTALL_MONGODB=false
 ARG INSTALL_OPCACHE=false
 ARG INSTALL_REDIS=false
+ARG INSTALL_XDEBUG=false
 
 COPY php-fpm/pool.conf \
      /usr/local/etc/php-fpm.d/
 
 COPY php-fpm/php.ini \
      php-fpm/opcache.ini \
+     php-fpm/xdebug.ini \
      /usr/local/etc/php/conf.d/
 
 RUN apk upgrade --update && \
@@ -36,6 +38,15 @@ RUN apk upgrade --update && \
     if [ ${INSTALL_REDIS} = true ]; then \
         pecl install redis && \
         docker-php-ext-enable redis \
+    ;fi && \
+    #------------------------------
+    # XDebug
+    #------------------------------
+    if [ ${INSTALL_XDEBUG} = true ]; then \
+        pecl install xdebug && \
+        docker-php-ext-enable xdebug \
+    ;else \
+        rm /usr/local/etc/php/conf.d/xdebug.ini \
     ;fi && \
     #------------------------------
     # Cleanup

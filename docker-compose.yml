@@ -26,5 +26,13 @@ services:
         - INSTALL_MONGODB=false
         - INSTALL_OPCACHE=false
         - INSTALL_REDIS=false
+        - INSTALL_XDEBUG=false
+    environment:
+      - XDEBUG_CONFIG=idekey=PHPSTORM
+      - PHP_IDE_CONFIG=serverName=localhost
+    extra_hosts:
+      # `echo $(ipconfig getifaddr en0)` for OSx
+      # TODO: Linux should be 127.0.0.1 .. make sure it is
+      - xdebug_host:0.0.0.0
     volumes:
       - ./src:/var/www
