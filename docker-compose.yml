@@ -22,5 +22,7 @@ services:
     build:
       context: .
       dockerfile: ./php-fpm/Dockerfile
+      args:
+        - INSTALL_REDIS=false
     volumes:
       - ./src:/var/www
