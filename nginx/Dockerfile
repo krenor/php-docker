@@ -11,7 +11,7 @@ COPY ./nginx/nginx.conf \
      /etc/nginx/
 
 # Load individual server configurations.
-COPY ./nginx/default.conf \
+COPY ./nginx/servers/* \
      /etc/nginx/conf.d/
 
 # Load entrypoint shell script.

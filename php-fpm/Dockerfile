@@ -10,9 +10,7 @@ ARG INSTALL_XDEBUG=false
 COPY php-fpm/pool.conf \
      /usr/local/etc/php-fpm.d/
 
-COPY php-fpm/php.ini \
-     php-fpm/opcache.ini \
-     php-fpm/xdebug.ini \
+COPY php-fpm/configs/* \
      /usr/local/etc/php/conf.d/
 
 RUN apk upgrade --update && \
