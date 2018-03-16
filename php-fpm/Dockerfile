@@ -3,6 +3,7 @@ FROM php:7.2-fpm-alpine
 ARG INSTALL_GD=false
 ARG INSTALL_MONGODB=false
 ARG INSTALL_OPCACHE=false
+ARG INSTALL_PGSQL=false
 ARG INSTALL_REDIS=false
 ARG INSTALL_XDEBUG=false
 
@@ -44,6 +45,13 @@ RUN apk upgrade --update && \
         docker-php-ext-install opcache \
     ;else \
         rm /usr/local/etc/php/conf.d/opcache.ini \
+    ;fi && \
+    #------------------------------
+    # PostgreSQL
+    #------------------------------
+    if [ ${INSTALL_PGSQL} = true ]; then \
+        apk add --no-cache postgresql-dev && \
+        docker-php-ext-install pgsql pdo_pgsql \
     ;fi && \
     #------------------------------
     # Redis
