@@ -15,9 +15,7 @@ COPY php-fpm/php.ini \
      /usr/local/etc/php/conf.d/
 
 RUN apk upgrade --update && \
-    apk add --no-cache --virtual build-dependencies \
-      autoconf \
-      build-base && \
+    apk add --no-cache --virtual build-dependencies ${PHPIZE_DEPS} && \
     #------------------------------
     # GD
     #------------------------------
