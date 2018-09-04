@@ -1,11 +1,17 @@
 FROM php:7.2-fpm-alpine
 
 ARG INSTALL_GD=false
+ARG INSTALL_MEMCACHED=false
 ARG INSTALL_MONGODB=false
 ARG INSTALL_OPCACHE=false
 ARG INSTALL_PGSQL=false
 ARG INSTALL_REDIS=false
 ARG INSTALL_XDEBUG=false
+
+ENV MEMCACHED_DEPS \
+    cyrus-sasl-dev \
+    libmemcached-dev \
+    zlib-dev
 
 COPY php-fpm/pool.conf \
      /usr/local/etc/php-fpm.d/
@@ -14,7 +20,8 @@ COPY php-fpm/configs/* \
      /usr/local/etc/php/conf.d/
 
 RUN apk upgrade --update && \
-    apk add --no-cache --virtual build-dependencies ${PHPIZE_DEPS} && \
+    apk add --no-cache --virtual build-dependencies \
+        ${PHPIZE_DEPS} && \
     #------------------------------
     # GD
     #------------------------------
@@ -28,6 +35,17 @@ RUN apk upgrade --update && \
             --with-jpeg-dir=/usr/lib \
             --with-png-dir=/usr/lib && \
         docker-php-ext-install gd \
+    ;fi && \
+    #------------------------------
+    # Memcached
+    #------------------------------
+    if [ ${INSTALL_MEMCACHED} = true ]; then \
+        apk add --no-cache --virtual build-dependencies \
+            ${MEMCACHED_DEPS} && \
+        apk add --no-cache \
+            libmemcached && \
+        pecl install memcached && \
+        docker-php-ext-enable memcached \
     ;fi && \
     #------------------------------
     # MongoDB

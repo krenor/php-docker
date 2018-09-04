@@ -24,6 +24,7 @@ services:
       dockerfile: ./php-fpm/Dockerfile
       args:
         - INSTALL_GD=false
+        - INSTALL_MEMCACHED=false
         - INSTALL_MONGODB=false
         - INSTALL_OPCACHE=false
         - INSTALL_PGSQL=false
