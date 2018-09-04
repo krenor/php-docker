@@ -1,5 +1,6 @@
 FROM php:7.2-fpm-alpine
 
+ARG INSTALL_APCU=false
 ARG INSTALL_GD=false
 ARG INSTALL_MEMCACHED=false
 ARG INSTALL_MONGODB=false
@@ -22,6 +23,13 @@ COPY php-fpm/configs/* \
 RUN apk upgrade --update && \
     apk add --no-cache --virtual build-dependencies \
         ${PHPIZE_DEPS} && \
+    #------------------------------
+    # APCu
+    #------------------------------
+    if [ ${INSTALL_APCU} = true ]; then \
+        pecl install apcu && \
+        docker-php-ext-enable apcu \
+    ;fi && \
     #------------------------------
     # GD
     #------------------------------

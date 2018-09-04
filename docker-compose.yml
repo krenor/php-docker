@@ -23,6 +23,7 @@ services:
       context: .
       dockerfile: ./php-fpm/Dockerfile
       args:
+        - INSTALL_APCU=false
         - INSTALL_GD=false
         - INSTALL_MEMCACHED=false
         - INSTALL_MONGODB=false
