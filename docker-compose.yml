@@ -40,3 +40,20 @@ services:
       - xdebug_host:0.0.0.0
     volumes:
       - ./src:/var/www
+    depends_on:
+      - redis
+
+  ## Redis Container ###########
+  redis:
+    image: redis:4.0-alpine
+    command:
+      - "redis-server"
+      - "--appendonly"
+      - "yes"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:
