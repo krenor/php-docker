@@ -14,12 +14,15 @@ ENV MEMCACHED_DEPS \
     libmemcached-dev \
     zlib-dev
 
+# Load the pool configuration.
 COPY php-fpm/pool.conf \
      /usr/local/etc/php-fpm.d/
 
+# Load additional php configuration files.
 COPY php-fpm/configs/* \
      /usr/local/etc/php/conf.d/
 
+# Install additional extensions.
 RUN apk upgrade --update && \
     apk add --no-cache --virtual build-dependencies \
         ${PHPIZE_DEPS} && \
@@ -75,7 +78,9 @@ RUN apk upgrade --update && \
     #------------------------------
     if [ ${INSTALL_PGSQL} = true ]; then \
         apk add --no-cache postgresql-dev && \
-        docker-php-ext-install pgsql pdo_pgsql \
+        docker-php-ext-install \
+            pgsql \
+            pdo_pgsql \
     ;fi && \
     #------------------------------
     # Redis
@@ -103,8 +108,14 @@ RUN apk upgrade --update && \
     apk del \
       build-dependencies
 
+# Load Laravel.
 COPY src/ /var/www
 
+# Run as a unique, less privileged user for security reasons.
+RUN chown -R www-data /var/www
+
+# Set default working directory.
 WORKDIR /var/www
 
+# Expose the port inside the container itself.
 EXPOSE 9000
