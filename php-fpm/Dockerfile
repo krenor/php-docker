@@ -81,6 +81,8 @@ RUN apk upgrade --update && \
         docker-php-ext-install \
             pgsql \
             pdo_pgsql \
+    ;else \
+        docker-php-ext-install pdo_mysql \
     ;fi && \
     #------------------------------
     # Redis

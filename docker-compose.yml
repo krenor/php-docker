@@ -41,7 +41,21 @@ services:
     volumes:
       - ./src:/var/www
     depends_on:
+      - mariadb
       - redis
+
+  ## Database Container ###########
+  mariadb:
+    image: yobasystems/alpine-mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
 
   ## Redis Container ###########
   redis:
@@ -56,4 +70,5 @@ services:
       - redis-data:/data
 
 volumes:
+  mariadb-data:
   redis-data:
