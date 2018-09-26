@@ -44,6 +44,20 @@ services:
       - mariadb
       - redis
 
+  ## Queue Worker Container ###########
+  queue-worker:
+    build:
+      context: .
+      dockerfile: ./php-fpm/Dockerfile
+    command:
+      - "./artisan"
+      - "queue:work"
+    volumes:
+      - ./src:/var/www
+    depends_on:
+      - mariadb
+      - redis
+
   ## Database Container ###########
   mariadb:
     image: yobasystems/alpine-mariadb
