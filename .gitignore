@@ -1,5 +1,3 @@
 .idea/
 .vscode/
 
-src/*
-!src/.gitkeep
